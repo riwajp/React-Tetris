@@ -24,3 +24,24 @@ a {
     background: black;
   }
 }
+
+
+.game{
+  margin:100px auto auto auto;
+  width:fit-content;
+}
+
+.block{
+  margin:-3px 0 0 0;
+  width:20px;
+  height:20px;
+  display:inline-block;
+  background-color: rgb(241, 212, 183);
+  margin-left:1px;
+  
+
+}
+.red{
+  background-color: rgb(230, 107, 107);
+  border:2px inset black;
+}
