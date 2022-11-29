@@ -6,14 +6,18 @@ const cleanMatrix = () => {
   for (let i = 0; i < 20; i++) {
     matrix[i] = [...row];
   }
-  console.log(matrix);
   return matrix;
 };
 
-const randomBrick = () => {
+const randomBrick = (id) => {
   let brick_names = Object.keys(bricks);
   let brick =
     bricks[brick_names[Math.floor(Math.random() * (brick_names.length - 1))]];
-  return brick;
+  let bricks_with_id = [];
+  for (let row of brick) {
+    let row_with_id = row.map((el) => (el == 0 ? 0 : { id: id }));
+    bricks_with_id.push(row_with_id);
+  }
+  return bricks_with_id;
 };
 export { cleanMatrix, randomBrick };
