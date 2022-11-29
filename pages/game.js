@@ -6,10 +6,8 @@ function game() {
   const mat = useMemo(() => cleanMatrix(), []);
   const [matrix, setMatrix] = useState(mat); //main matrix
   const matrix_ref = useRef(matrix);
-  const [send_brick, setSendBrick] = useState(1);
-  const send_brick_ref = useRef(send_brick);
-  const [current_brick_id, setCurrentBtickId] = useState(0);
-  const current_brick_id_ref = useRef(current_brick_id);
+  const send_brick_ref = useRef(1);
+  const current_brick_id_ref = useRef(0);
   //==============================================================
   //==============================================================
   const mainLoop = () => {
@@ -25,7 +23,7 @@ function game() {
       temp_matrix.unshift(...new_brick);
       setMatrix(temp_matrix);
 
-      setSendBrick(0);
+      send_brick_ref.current = 0;
 
       return;
     }
@@ -51,28 +49,46 @@ function game() {
     }
     setMatrix(temp_matrix);
 
-    setSendBrick(flag);
-    setCurrentBtickId(current_brick_id + (flag ? 1 : 0));
+    send_brick_ref.current = flag;
+    current_brick_id_ref.current = current_brick_id + (flag ? 1 : 0);
   };
   //==============================================================
   //==============================================================
 
-  const handleKeyDown = (k) => {
+  const moveBrick = (x, y) => {
     let temp_matrix = JSON.parse(JSON.stringify(matrix));
-    if (k.code == "ArrowRight") {
-      for (let i = temp_matrix.length - 1; i >= 0; i--) {
-        for (let j = temp_matrix[i].length - 1; j >= 0; j--) {
-          if (
-            temp_matrix[i][j] != 0 &&
-            temp_matrix[i][j]["id"] == current_brick_id
-          ) {
-            temp_matrix[i][j + 1] = temp_matrix[i][j];
-            temp_matrix[i][j] = 0;
-          }
+
+    for (let i = temp_matrix.length - 1; i >= 0; i--) {
+      for (
+        let j = x > 0 ? temp_matrix[i].length - 1 : 0;
+        (x > 0 && j >= 0) || (x < 0 && j < temp_matrix[i].length);
+        x > 0 ? j-- : j++
+      ) {
+        if (
+          temp_matrix[i][j] != 0 &&
+          temp_matrix[i][j]["id"] == current_brick_id_ref.current
+        ) {
+          temp_matrix[i][j + x] = temp_matrix[i][j];
+          temp_matrix[i][j] = 0;
+        }
+
+        if (
+          temp_matrix[i][j] != 0 &&
+          temp_matrix[i][j]["id"] == current_brick_id_ref.current
+        ) {
+          temp_matrix[i + y][j] = temp_matrix[i][j];
+          temp_matrix[i][j] = 0;
         }
       }
     }
     setMatrix(temp_matrix);
+  };
+  const handleKeyDown = (k) => {
+    if (k.code == "ArrowRight") {
+      moveBrick(1, 0);
+    } else if (k.code == "ArrowLeft") {
+      moveBrick(-1, 0);
+    }
   };
 
   //set main loop and event listeners
@@ -86,9 +102,7 @@ function game() {
 
   useEffect(() => {
     matrix_ref.current = matrix;
-    send_brick_ref.current = send_brick;
-    current_brick_id_ref.current = current_brick_id;
-  }, [matrix, send_brick, current_brick_id]);
+  }, [matrix]);
 
   useEffect(() => {
     setInterval(() => {
