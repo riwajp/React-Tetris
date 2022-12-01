@@ -5,7 +5,7 @@ function Matrix({ matrix }) {
     <div>
       {matrix.map((row, i) => (
         <div key={i}>
-          {row.map((element, j) => (
+          {row?.map((element, j) => (
             <Block key={`${i} ${j}`} color="red" filled={element != 0} />
           ))}
         </div>
