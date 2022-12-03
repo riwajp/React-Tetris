@@ -1,9 +1,8 @@
 import Block from "./Block";
-
 function Matrix({ matrix }) {
   return (
     <div>
-      {matrix.map((row, i) => (
+      {matrix?.map((row, i) => (
         <div key={i}>
           {row?.map((element, j) => (
             <Block
