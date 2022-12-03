@@ -10,12 +10,18 @@ const cleanMatrix = () => {
 };
 
 const randomBrick = (id) => {
+  let colors = ["#EF9A53", "#59C1BD", "#F7A4A4", "#A9AF7E", "#F0FF42"];
+  let color = colors[Math.floor(Math.random() * (colors.length - 1))];
+
   let brick_names = Object.keys(bricks);
   let brick =
     bricks[brick_names[Math.floor(Math.random() * (brick_names.length - 1))]];
   let bricks_with_id = [];
-  for (let row of brick) {
-    let row_with_id = row.map((el) => (el == 0 ? 0 : { id: id }));
+  for (let i in brick) {
+    let row = brick[i];
+    let row_with_id = row.map((el, j) =>
+      el == 0 ? 0 : { id: id, indices: `${i}${j}`, color: color }
+    );
     bricks_with_id.push(row_with_id);
   }
   return bricks_with_id;
@@ -44,8 +50,9 @@ const extremeBlocks = (matrix, id) => {
   let left = Math.min(...x);
   let right = Math.max(...x);
   let down = Math.max(...y);
+  let up = Math.min(...y);
 
-  return { left, right, down };
+  return { left, right, down, up };
 };
 
 const landed = (matrix, id) => {
@@ -98,6 +105,57 @@ const touched_brick = (matrix, id) => {
   }
   return flag;
 };
+
+const rotateMatrix = (matrix) => {
+  let new_matrix = JSON.parse(JSON.stringify(matrix));
+  let transposed_positions = [];
+
+  for (let i in matrix) {
+    let row = matrix[i];
+    for (let j in row) {
+      if (matrix[i][j] != 0) {
+        new_matrix[j][4 - i] = matrix[i][j];
+        //new_matrix[j][4 - i].new_indices = `${j}${4 - i}`;
+        transposed_positions.push([j, 4 - i]);
+      }
+    }
+  }
+
+  for (let i in new_matrix) {
+    for (let j in new_matrix[i]) {
+      if (!transposed_positions.filter((p) => p[0] == i && p[1] == j).length) {
+        new_matrix[i][j] = 0;
+      }
+    }
+  }
+
+  var min_col = 3;
+  var min_row = 3;
+  for (let row of new_matrix) {
+    min_col =
+      row.findIndex((b) => b?.id) > -1
+        ? Math.min(
+            row.findIndex((b) => b?.id),
+            min_col
+          )
+        : min_col;
+  }
+
+  for (let i in new_matrix) {
+    for (let j in new_matrix[i]) {
+      if (j - min_col >= 0) {
+        new_matrix[i][j - min_col] = new_matrix[i][j];
+        new_matrix[i][j] = 0;
+      }
+    }
+  }
+
+  return new_matrix;
+};
+
+const copy = (matrix) => {
+  return JSON.parse(JSON.stringify(matrix));
+};
 export {
   cleanMatrix,
   randomBrick,
@@ -106,4 +164,6 @@ export {
   filledRows,
   touched_brick,
   blockIndices,
+  rotateMatrix,
+  copy,
 };
