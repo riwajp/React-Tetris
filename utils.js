@@ -1,4 +1,4 @@
-import bricks from "./bricks.json";
+import local_bricks from "./bricks.json";
 
 const cleanMatrix = () => {
   let row = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -9,7 +9,7 @@ const cleanMatrix = () => {
   return matrix;
 };
 
-const randomBrick = (id) => {
+const randomBrick = (id, bricks = local_bricks) => {
   let colors = ["#EF9A53", "#59C1BD", "#F7A4A4", "#A9AF7E", "#F0FF42"];
   let color = colors[Math.floor(Math.random() * (colors.length - 1))];
 

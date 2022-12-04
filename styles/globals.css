@@ -33,28 +33,47 @@ a {
   width:fit-content;
 }
 
-.matrix{
-}
+
 .block{
   margin:-5px 0 0 1px;
   width:20px;
   height:20px;
   display:inline-block;
   background-color: rgb(66, 66, 66);
+border-radius:1px;
+}
+.small_block_div{
+  margin-top:-10px;
+}
+.small{
+  width:10px;
+  height:10px;
+  margin:-10px 0 0 0;
+
+  
+
 
 }
 
+.next_block_container{
+
+margin: 5px auto 0 auto;
+}
+
 .scoreboard_container{
-  height:70px;
+  height:80px;
   padding:10px;
   background-color: rgb(75, 75, 75);
   padding:5px;
   margin-bottom:10px;
+  flex:1;
+  border:2px solid white;
+  
 }
 
 .score_label{
   color:white;
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 500;
 }
 
@@ -75,4 +94,8 @@ a {
 }
 
 .land_block{
+}
+
+.top{
+  display:flex;
 }

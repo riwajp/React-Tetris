@@ -11,14 +11,29 @@ import {
   copy,
   landIndices,
 } from "../utils";
+import NextBlock from "./components/NextBlock";
+import { useRouter } from "next/router";
 
-function game() {
+function game({ bricks }) {
+  console.log(bricks);
+  // console.log(JSON.parse(router.query.bricks));
   const mat = useMemo(() => cleanMatrix(), []);
+
   const [main_matrix, setMainMatrix] = useState(mat); //main matrix
-  const [current_block, setCurrentBlock] = useState();
+
   const matrix_ref = useRef(main_matrix);
   const send_brick_ref = useRef(1);
   const current_brick_id_ref = useRef(0);
+  const initial_block = useMemo(() => {
+    if (bricks) {
+      return randomBrick(current_brick_id_ref.current, JSON.parse(bricks));
+    } else {
+      return randomBrick(current_brick_id_ref.current);
+    }
+  }, []);
+  const [current_block, setCurrentBlock] = useState();
+  const [next_block, setNextBlock] = useState(initial_block);
+  const next_block_ref = useRef(next_block);
   const [score, setScore] = useState(0);
   const score_ref = useRef(score);
   const [land_index, setLandIndex] = useState(
@@ -104,93 +119,102 @@ function game() {
         matrix_ref.current = temp_matrix;
       }
     } catch {
-      console.log("Error rotate");
+      console.log("Rotate Error");
     }
   };
   //let new_matrix = JSON.parse(JSON.stringify(matrix));
 
   const mainLoop = () => {
-    try {
-      let matrix = matrix_ref.current;
+    let matrix = matrix_ref.current;
 
-      if (
-        matrix[3].filter((e) => e != 0 && e.id != current_brick_id_ref.current)
-          .length > 0
-      ) {
-        window.alert("Lost, Score : " + score_ref.current);
-        setGameOver(1);
-        return;
-      }
+    if (
+      matrix[3].filter((e) => e != 0 && e.id != current_brick_id_ref.current)
+        .length > 0
+    ) {
+      window.alert("Lost, Score : " + score_ref.current);
+      setGameOver(1);
+      return;
+    }
 
-      let send_brick = send_brick_ref.current;
-      let current_brick_id = current_brick_id_ref.current;
-      //if send_brick==1, then send a random brick
-      if (send_brick) {
-        let temp_matrix = JSON.parse(JSON.stringify(matrix));
-
-        let new_brick = JSON.parse(
-          JSON.stringify(randomBrick(current_brick_id))
-        );
-        setCurrentBlock(new_brick);
-        let new_block_start_index = Math.floor(Math.random() * 8);
-        for (let i = 0; i <= 3; i++) {
-          for (
-            let j = new_block_start_index;
-            j <= new_block_start_index + 3;
-            j++
-          ) {
-            temp_matrix[i][j] = new_brick[i][j - new_block_start_index];
-          }
-        }
-        setMainMatrix(temp_matrix);
-        matrix_ref.current = temp_matrix;
-
-        send_brick_ref.current = 0;
-        return;
-      }
-      //==============================================================
-      //==============================================================
-
-      //movements of block i.e. matrix elements
+    let send_brick = send_brick_ref.current;
+    let current_brick_id = current_brick_id_ref.current;
+    //if send_brick==1, then send a random brick
+    if (send_brick) {
       let temp_matrix = JSON.parse(JSON.stringify(matrix));
-      var flag = 1;
-      if (!touched_brick(matrix, current_brick_id_ref.current).down) {
-        for (let i = temp_matrix.length - 1; i >= 0; i--) {
-          for (let j = temp_matrix[i].length - 1; j >= 0; j--) {
-            if (
-              temp_matrix[i][j].id == current_brick_id_ref.current &&
-              temp_matrix[i + 1] &&
-              temp_matrix[i + 1][j] == 0
-            ) {
-              temp_matrix[i + 1][j] = temp_matrix[i][j];
-              temp_matrix[i][j] = 0;
-
-              flag = 0;
-            }
-          }
-        }
+      var new_brick;
+      if (bricks) {
+        new_brick = randomBrick(
+          current_brick_id_ref.current + 1,
+          JSON.parse(bricks)
+        );
+      } else {
+        new_brick = JSON.parse(
+          JSON.stringify(randomBrick(current_brick_id + 1))
+        );
       }
 
-      send_brick_ref.current = flag;
-      current_brick_id_ref.current = current_brick_id + (flag ? 1 : 0);
-
-      //delete rows
-      let filled_rows = filledRows(matrix, current_brick_id_ref.current);
-      for (let i of filled_rows) {
-        for (let j in temp_matrix[i]) {
-          temp_matrix[i][j] = 0;
-        }
-        for (let k = i - 1; k >= 0; k--) {
-          temp_matrix[k + 1] = temp_matrix[k];
+      let new_block_start_index = Math.floor(Math.random() * 8);
+      for (let i = 0; i <= 3; i++) {
+        for (
+          let j = new_block_start_index;
+          j <= new_block_start_index + 3;
+          j++
+        ) {
+          temp_matrix[i][j] =
+            next_block_ref.current[i][j - new_block_start_index];
         }
       }
       setMainMatrix(temp_matrix);
       matrix_ref.current = temp_matrix;
-      setScore(score_ref.current + filled_rows.length * 12);
-      score_ref.current = score_ref.current + filled_rows.length * 12;
-    } catch {
-      console.log("error main loop");
+
+      send_brick_ref.current = 0;
+
+      setCurrentBlock(next_block_ref.current);
+      setNextBlock(new_brick);
+
+      next_block_ref.current = new_brick;
+      return;
     }
+    //==============================================================
+    //==============================================================
+
+    //movements of block i.e. matrix elements
+    let temp_matrix = JSON.parse(JSON.stringify(matrix));
+    var flag = 1;
+    if (!touched_brick(matrix, current_brick_id_ref.current).down) {
+      for (let i = temp_matrix.length - 1; i >= 0; i--) {
+        for (let j = temp_matrix[i].length - 1; j >= 0; j--) {
+          if (
+            temp_matrix[i][j].id == current_brick_id_ref.current &&
+            temp_matrix[i + 1] &&
+            temp_matrix[i + 1][j] == 0
+          ) {
+            temp_matrix[i + 1][j] = temp_matrix[i][j];
+            temp_matrix[i][j] = 0;
+
+            flag = 0;
+          }
+        }
+      }
+    }
+
+    send_brick_ref.current = flag;
+    current_brick_id_ref.current = current_brick_id + (flag ? 1 : 0);
+
+    //delete rows
+    let filled_rows = filledRows(matrix, current_brick_id_ref.current);
+    for (let i of filled_rows) {
+      for (let j in temp_matrix[i]) {
+        temp_matrix[i][j] = 0;
+      }
+      for (let k = i - 1; k >= 0; k--) {
+        temp_matrix[k + 1] = temp_matrix[k];
+      }
+    }
+    setMainMatrix(temp_matrix);
+    matrix_ref.current = temp_matrix;
+    setScore(score_ref.current + filled_rows.length * 12);
+    score_ref.current = score_ref.current + filled_rows.length * 12;
   };
   //==============================================================
   //==============================================================
@@ -286,8 +310,11 @@ function game() {
 
   return (
     <div className="game">
-      <div className="matrix">
+      <div className="top">
         <ScoreBoard score={score} />
+        <NextBlock next_block={next_block} />
+      </div>
+      <div className="matrix">
         <Matrix
           matrix={main_matrix}
           land_index={land_index}
@@ -297,5 +324,11 @@ function game() {
     </div>
   );
 }
+
+game.getInitialProps = async ({ query }) => {
+  const { bricks } = query;
+
+  return { bricks };
+};
 
 export default game;
