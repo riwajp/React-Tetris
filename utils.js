@@ -108,7 +108,6 @@ const touched_brick = (matrix, id) => {
 
 const rotateMatrix = (matrix) => {
   let new_matrix = JSON.parse(JSON.stringify(matrix));
-  console.log("Original", copy(matrix));
   let transposed_positions = [];
 
   for (let i in matrix) {
@@ -129,7 +128,6 @@ const rotateMatrix = (matrix) => {
       }
     }
   }
-  console.log("Rotated", copy(new_matrix));
   var min_col = 3;
   var min_row = 3;
   for (let row of new_matrix) {
@@ -141,7 +139,6 @@ const rotateMatrix = (matrix) => {
           )
         : min_col;
   }
-  console.log(min_col);
   for (let i in new_matrix) {
     for (let j in new_matrix[i]) {
       if (j - min_col >= 0) {
@@ -150,13 +147,47 @@ const rotateMatrix = (matrix) => {
       }
     }
   }
-  console.log("Final", copy(new_matrix));
   return new_matrix;
 };
 
 const copy = (matrix) => {
   return JSON.parse(JSON.stringify(matrix));
 };
+
+const landIndices = (matrix, id) => {
+  let bottom_index = extremeBlocks(matrix, id).down;
+
+  let block_indices = blockIndices(matrix, id);
+  let bottom_indices = block_indices.filter((b) => b[1] == bottom_index);
+
+  var go_down_by = 0;
+
+  if (bottom_index != -Infinity) {
+    for (let i = bottom_index + 1; i <= 19; i++) {
+      var flag = 1;
+
+      for (let j of block_indices) {
+        if (
+          (matrix[i - (bottom_index - j[1])][j[0]] == 0 ||
+            matrix[i - (bottom_index - j[1])][j[0]].id == id) &&
+          (matrix
+            .map((r) => (r[j[0]] == 0 || r[j[0]].id == id ? 0 : 1))
+            .indexOf(1) > j[1] ||
+            matrix
+              .map((r) => (r[j[0]] == 0 || r[j[0]].id == id ? 0 : 1))
+              .indexOf(1) == -1)
+        ) {
+        } else {
+          flag = 0;
+        }
+      }
+
+      go_down_by += flag ? 1 : 0;
+    }
+  }
+  return go_down_by;
+};
+
 export {
   cleanMatrix,
   randomBrick,
@@ -167,4 +198,5 @@ export {
   blockIndices,
   rotateMatrix,
   copy,
+  landIndices,
 };

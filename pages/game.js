@@ -9,6 +9,7 @@ import {
   touched_brick,
   rotateMatrix,
   copy,
+  landIndices,
 } from "../utils";
 
 function game() {
@@ -20,9 +21,13 @@ function game() {
   const current_brick_id_ref = useRef(0);
   const [score, setScore] = useState(0);
   const score_ref = useRef(score);
+  const [land_index, setLandIndex] = useState(
+    landIndices(main_matrix, current_brick_id_ref.current)
+  );
 
   useEffect(() => {
     matrix_ref.current = main_matrix;
+    setLandIndex(landIndices(main_matrix, current_brick_id_ref.current));
   }, [main_matrix]);
 
   //==============================================================
@@ -195,6 +200,8 @@ function game() {
     let temp_matrix = JSON.parse(JSON.stringify(main_matrix));
 
     if (x == 0 && y > 0) {
+      landIndices(matrix_ref.current, current_brick_id_ref.current);
+
       while (y > 0) {
         if (!touched_brick(temp_matrix, id).down) {
           let block_indices = blockIndices(temp_matrix, id);
@@ -248,9 +255,14 @@ function game() {
       k.code == "ArrowDown" &&
       !touched_brick(main_matrix, current_brick_id_ref.current).down
     ) {
-      moveBrick(0, 3, extremeIndices.down);
+      moveBrick(0, 1, extremeIndices.down);
     } else if (k.code == "ArrowUp") {
       rotateBlock();
+    } else if (k.code == "Space") {
+      moveBrick(
+        0,
+        landIndices(matrix_ref.current, current_brick_id_ref.current)
+      );
     }
   };
 
@@ -266,8 +278,9 @@ function game() {
   useEffect(() => {
     setInterval(() => {
       mainLoop();
-    }, 1000);
+    }, 700);
   }, []);
+
   //==============================================================
   //==============================================================
 
@@ -275,7 +288,11 @@ function game() {
     <div className="game">
       <div className="matrix">
         <ScoreBoard score={score} />
-        <Matrix matrix={main_matrix} />
+        <Matrix
+          matrix={main_matrix}
+          land_index={land_index}
+          id={current_brick_id_ref}
+        />
       </div>
     </div>
   );

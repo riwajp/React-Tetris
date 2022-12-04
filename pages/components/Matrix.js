@@ -1,5 +1,8 @@
 import Block from "./Block";
-function Matrix({ matrix }) {
+import { blockIndices } from "../../utils";
+function Matrix({ matrix, land_index, id }) {
+  let block_indices = blockIndices(matrix, id.current);
+  let land_indices = block_indices.map((b) => [b[1] + land_index, b[0]]);
   return (
     <div>
       {matrix?.map((row, i) => (
@@ -10,6 +13,9 @@ function Matrix({ matrix }) {
               color={element == 0 ? "" : element.color}
               filled={element != 0}
               border={i == 3}
+              land_block={
+                land_indices.filter((b) => b[0] == i && b[1] == j).length
+              }
             />
           ))}
         </div>

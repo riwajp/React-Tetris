@@ -69,3 +69,10 @@ a {
   border-top:2px solid red;
 }
 
+.filled{
+  border:2px inset white;
+
+}
+
+.land_block{
+}
