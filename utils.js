@@ -108,6 +108,7 @@ const touched_brick = (matrix, id) => {
 
 const rotateMatrix = (matrix) => {
   let new_matrix = JSON.parse(JSON.stringify(matrix));
+  console.log("Original", copy(matrix));
   let transposed_positions = [];
 
   for (let i in matrix) {
@@ -128,19 +129,19 @@ const rotateMatrix = (matrix) => {
       }
     }
   }
-
+  console.log("Rotated", copy(new_matrix));
   var min_col = 3;
   var min_row = 3;
   for (let row of new_matrix) {
     min_col =
-      row.findIndex((b) => b?.id) > -1
+      row.findIndex((b) => b?.id >= 0) > -1
         ? Math.min(
-            row.findIndex((b) => b?.id),
+            row.findIndex((b) => b?.id >= 0),
             min_col
           )
         : min_col;
   }
-
+  console.log(min_col);
   for (let i in new_matrix) {
     for (let j in new_matrix[i]) {
       if (j - min_col >= 0) {
@@ -149,7 +150,7 @@ const rotateMatrix = (matrix) => {
       }
     }
   }
-
+  console.log("Final", copy(new_matrix));
   return new_matrix;
 };
 
