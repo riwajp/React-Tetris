@@ -1,7 +1,7 @@
 import Block from "./Block";
 import { blockIndices } from "../../utils";
 function Matrix({ matrix, land_index, id }) {
-  let block_indices = blockIndices(matrix, id.current);
+  let block_indices = blockIndices(matrix, id?.current);
   let land_indices = block_indices.map((b) => [b[1] + land_index, b[0]]);
   return (
     <div>
