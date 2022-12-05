@@ -56,11 +56,12 @@ export default function Home() {
       </Link>
 
       <div className="home_scores">
-        <div className="home_scores_title">Hall of Fame</div>
+        <div className="home_scores_title glow">Hall of Fame</div>
         {scores ? (
-          <table>
+          <table cellSpacing={0}>
             <tbody>
               <tr className="heading">
+                <th>Rank</th>
                 <th>Name</th>
                 <th>Score</th>
               </tr>
@@ -69,9 +70,8 @@ export default function Home() {
                 .sort((a, b) => b.score - a.score)
                 .map((s, i) => (
                   <tr className="score_member">
-                    <td>
-                      {i + 1}. {s.name}
-                    </td>
+                    <td>{i + 1}.</td>
+                    <td>{s.name}</td>
 
                     <td>{s.score}</td>
                   </tr>

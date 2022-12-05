@@ -149,26 +149,49 @@ margin: 5px auto 0 auto;
 }
 
 .home_scores_title{
+  margin-bottom:20px;
   text-align: center;
   font-size: 20px;
-  color:rgb(216, 216, 76);
+  color: #fff;
+
+  text-shadow:
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #fff,
+    0 0 42px #0fa,
+    0 0 82px #0fa,
+    0 0 92px #0fa,
+    0 0 102px #0fa,
+    0 0 151px #0fa;
 }
 
-
+table{
+  width:100%;
+  
+}
 th{
   color:white;
   font-weight: 600;
 }
 
+tr{
+  background-color: rgb(41, 41, 41);
+  width:100%;
+}
+
 td{
-  color:white
+  color:white;
+ padding:5px 30px 5px 5px;
+ text-align: center;
 }
 
 .heading{
   border-bottom: 2px solid yellow;
 }
-
-table tr .score_member{
+.score_member{
   margin-top:10px;
   border:1px solid white
 }
+
+
+
