@@ -147,13 +147,11 @@ function game({ bricks, username }) {
     }
 
     if (save) {
+      let arr = [...high_scores, { name: username, score: score_temp }];
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([
-          ...high_scores,
-          { name: username, score: score_temp },
-        ]),
+        body: JSON.stringify(arr.slice(0, min(5, arr.length))),
       };
 
       fetch(
