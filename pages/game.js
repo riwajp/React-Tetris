@@ -132,26 +132,27 @@ function game({ bricks, username }) {
     if (high_scores && username && score_temp > 0 && !bricks) {
       console.log("here");
       if (
-        (Object.keys(high_scores).indexOf(username) == -1 &&
+        (high_scores.findIndex((o) => o.name == username) == -1 &&
           high_scores.length <= 5) ||
         high_scores[username] < score_temp
       ) {
         save = 1;
         console.log("here1");
-      } else if (
-        Object.values(high_scores).filter((s) => s < score_temp).length >= 1
-      ) {
+      } else if (high_scores.filter((s) => s.score < score_temp).length >= 1) {
         save = 1;
         console.log("here1");
       }
     }
 
     if (save) {
-      let arr = [...high_scores, { name: username, score: score_temp }];
+      let arr = [...high_scores, { name: username, score: score_temp }].sort(
+        (a, b) => b.score - a.score
+      );
+      console.log(arr.slice(0, Math.min(5, arr.length)));
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(arr.slice(0, min(5, arr.length))),
+        body: JSON.stringify(arr.slice(0, Math.min(5, arr.length))),
       };
 
       fetch(
