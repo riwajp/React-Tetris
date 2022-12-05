@@ -14,12 +14,12 @@ import {
 import NextBlock from "./components/NextBlock";
 import { useRouter } from "next/router";
 
-function game({ bricks }) {
-  console.log(bricks);
+function game({ bricks, username }) {
   // console.log(JSON.parse(router.query.bricks));
   const mat = useMemo(() => cleanMatrix(), []);
 
   const [main_matrix, setMainMatrix] = useState(mat); //main matrix
+  const game_running = useRef(1);
 
   const matrix_ref = useRef(main_matrix);
   const send_brick_ref = useRef(1);
@@ -31,6 +31,7 @@ function game({ bricks }) {
       return randomBrick(current_brick_id_ref.current);
     }
   }, []);
+  const is_high = useRef(0);
   const [current_block, setCurrentBlock] = useState();
   const [next_block, setNextBlock] = useState(initial_block);
   const next_block_ref = useRef(next_block);
@@ -123,8 +124,50 @@ function game({ bricks }) {
     }
   };
   //let new_matrix = JSON.parse(JSON.stringify(matrix));
+  const setHighScore = () => {
+    let high_scores = JSON.parse(sessionStorage.getItem("scores"));
+    console.log(high_scores);
+    var save = 0;
+    let score_temp = score_ref.current;
+    if (high_scores && username && score_temp > 0 && !bricks) {
+      console.log("here");
+      if (
+        (Object.keys(high_scores).indexOf(username) == -1 &&
+          high_scores.length <= 5) ||
+        high_scores[username] < score_temp
+      ) {
+        save = 1;
+        console.log("here1");
+      } else if (
+        Object.values(high_scores).filter((s) => s < score_temp).length >= 1
+      ) {
+        save = 1;
+        console.log("here1");
+      }
+    }
 
+    if (save) {
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify([
+          ...high_scores,
+          { name: username, score: score_temp },
+        ]),
+      };
+
+      fetch(
+        "https://jsonblob.com/api/jsonBlob/1049296309869363200",
+        requestOptions
+      ).then((data) => {
+        console.log("You're in the Hall of Fame! Go get a life now.");
+        is_high.current = 1;
+      });
+    }
+  };
   const mainLoop = () => {
+    setHighScore();
+
     let matrix = matrix_ref.current;
 
     if (
@@ -132,7 +175,12 @@ function game({ bricks }) {
         .length > 0
     ) {
       window.alert("Lost, Score : " + score_ref.current);
-      setGameOver(1);
+      if (is_high.current) {
+        window.alert("You're in the Hall of Fame! Go get a life now.");
+      }
+
+      game_running.current = 0;
+
       return;
     }
 
@@ -300,9 +348,12 @@ function game({ bricks }) {
   }, [handleKeyDown, current_block, rotateBlock]);
 
   useEffect(() => {
-    setInterval(() => {
-      mainLoop();
+    let intv = setInterval(() => {
+      if (game_running.current) {
+        mainLoop();
+      }
     }, 700);
+    return () => clearInterval(intv);
   }, []);
 
   //==============================================================
@@ -326,9 +377,9 @@ function game({ bricks }) {
 }
 
 game.getInitialProps = async ({ query }) => {
-  const { bricks } = query;
+  const { bricks, username } = query;
 
-  return { bricks };
+  return { bricks, username };
 };
 
 export default game;

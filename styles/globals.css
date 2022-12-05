@@ -99,3 +99,76 @@ margin: 5px auto 0 auto;
 .top{
   display:flex;
 }
+
+
+.home_title{
+  font-size:20px;
+  color:white;
+  text-align: center;
+
+}
+.home_container{
+  margin:30px auto auto auto;
+  width:fit-content;
+  
+
+}
+
+.home_name{
+  margin-top: 20px;
+}
+
+.home_label{
+  font-size:12px;
+  color:white;
+  margin-left:2px;
+}
+.home_name_input{
+  width:300px;
+  height:30px;
+  border:1px solid white;
+  border-radius: 5px;
+}
+
+.home_play{
+  margin-top: 20px;
+  width:100%;
+  background-color: rgb(40, 160, 40);
+  border:1px solid rgb(40, 160, 40);
+  border-radius: 5px;
+  height:30px;
+  color:white;
+}
+
+.home_scores{
+  margin-top:20px;
+  border:1px solid rgb(187, 213, 95);
+  min-height:200px;
+
+  
+}
+
+.home_scores_title{
+  text-align: center;
+  font-size: 20px;
+  color:rgb(216, 216, 76);
+}
+
+
+th{
+  color:white;
+  font-weight: 600;
+}
+
+td{
+  color:white
+}
+
+.heading{
+  border-bottom: 2px solid yellow;
+}
+
+table tr .score_member{
+  margin-top:10px;
+  border:1px solid white
+}
