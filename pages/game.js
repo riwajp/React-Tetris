@@ -312,7 +312,7 @@ function game({ bricks }) {
     <div className="game">
       <div className="top">
         <ScoreBoard score={score} />
-        <NextBlock next_block={next_block} />
+        <NextBlock next_block={next_block} current_block={current_block} />
       </div>
       <div className="matrix">
         <Matrix
