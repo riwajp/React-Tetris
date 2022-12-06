@@ -150,7 +150,7 @@ function game({ bricks, username }) {
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(arr.slice(0, Math.min(5, arr.length))),
+        body: JSON.stringify(arr),
       };
 
       fetch(
