@@ -12,7 +12,8 @@ export default function Home() {
         sessionStorage.setItem("scores", JSON.stringify(res));
         setScores(res);
         console.log(res);
-      });
+      })
+      .catch((err) => console.log("Error", err));
   }, []);
 
   const [name, setName] = useState("");
@@ -47,6 +48,7 @@ export default function Home() {
             )
           }
           value={name}
+          maxLength={15}
           placeholder="Username"
         />
         <div className="home_label">*We need your name to save your score.</div>
@@ -68,6 +70,7 @@ export default function Home() {
 
               {scores
                 .sort((a, b) => b.score - a.score)
+                .slice(0, 5)
                 .map((s, i) => (
                   <tr className="score_member">
                     <td>{i + 1}.</td>

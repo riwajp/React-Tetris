@@ -11,10 +11,11 @@ import {
   copy,
   landIndices,
 } from "../utils";
+
 import NextBlock from "./components/NextBlock";
-import { useRouter } from "next/router";
 
 function game({ bricks, username }) {
+  const high_score = useRef();
   // console.log(JSON.parse(router.query.bricks));
   const mat = useMemo(() => cleanMatrix(), []);
 
@@ -127,27 +128,23 @@ function game({ bricks, username }) {
   const setHighScore = () => {
     let high_scores = JSON.parse(sessionStorage.getItem("scores"));
     console.log(high_scores);
-    var save = 0;
+
     let score_temp = score_ref.current;
     if (high_scores && username && score_temp > 0 && !bricks) {
-      console.log("here");
-      if (
-        (high_scores.findIndex((o) => o.name == username) == -1 &&
-          high_scores.length <= 5) ||
-        high_scores[username] < score_temp
-      ) {
-        save = 1;
-        console.log("here1");
-      } else if (high_scores.filter((s) => s.score < score_temp).length >= 1) {
-        save = 1;
-        console.log("here1");
-      }
-    }
-
-    if (save) {
-      let arr = [...high_scores, { name: username, score: score_temp }].sort(
-        (a, b) => b.score - a.score
+      let high_score_user_index = high_scores.findIndex(
+        (s) => s.name == username
       );
+      var arr;
+      if (high_score_user_index != -1) {
+        high_scores[high_score_user_index].score = Math.max(
+          high_scores[high_score_user_index].score,
+          score_temp
+        );
+        console.log("Posted update");
+        arr = [...high_scores];
+      } else {
+        arr = [...high_scores, { name: username, score: score_temp }];
+      }
       console.log(arr.slice(0, Math.min(5, arr.length)));
       const requestOptions = {
         method: "PUT",
@@ -158,10 +155,11 @@ function game({ bricks, username }) {
       fetch(
         "https://jsonblob.com/api/jsonBlob/1049296309869363200",
         requestOptions
-      ).then((data) => {
-        console.log("You're in the Hall of Fame! Go get a life now.");
-        is_high.current = 1;
-      });
+      )
+        .then((data) => {
+          is_high.current = 1;
+        })
+        .catch((err) => console.log("error", err));
     }
   };
   const mainLoop = () => {
@@ -173,10 +171,7 @@ function game({ bricks, username }) {
       matrix[3].filter((e) => e != 0 && e.id != current_brick_id_ref.current)
         .length > 0
     ) {
-      window.alert("Lost, Score : " + score_ref.current);
-      if (is_high.current) {
-        window.alert("You're in the Hall of Fame! Go get a life now.");
-      }
+      window.alert("Game Over! Score : " + score_ref.current);
 
       game_running.current = 0;
 
@@ -353,6 +348,18 @@ function game({ bricks, username }) {
       }
     }, 700);
     return () => clearInterval(intv);
+  }, []);
+
+  useEffect(() => {
+    let intv1 = setInterval(() => {
+      fetch("https://jsonblob.com/api/jsonBlob/1049296309869363200")
+        .then((res) => res.json())
+        .then((res) => {
+          sessionStorage.setItem("scores", JSON.stringify(res));
+        })
+        .catch((err) => console.log("Error", err));
+    }, 1000);
+    return () => clearInterval(intv1);
   }, []);
 
   //==============================================================
