@@ -15,7 +15,7 @@ import {
 import NextBlock from "./components/NextBlock";
 
 function game({ bricks, username }) {
-  const high_score = useRef();
+  console.log("S");
   // console.log(JSON.parse(router.query.bricks));
   const mat = useMemo(() => cleanMatrix(), []);
 
@@ -47,8 +47,7 @@ function game({ bricks, username }) {
     setLandIndex(landIndices(main_matrix, current_brick_id_ref.current));
   }, [main_matrix]);
 
-  //==============================================================
-  //==============================================================
+  //=================================================================================================================
 
   const rotateBlock = () => {
     try {
@@ -124,7 +123,9 @@ function game({ bricks, username }) {
       console.log("Rotate Error");
     }
   };
-  //let new_matrix = JSON.parse(JSON.stringify(matrix));
+
+  //=================================================================================================================
+
   const setHighScore = () => {
     let high_scores = JSON.parse(sessionStorage.getItem("scores"));
     console.log(high_scores);
@@ -162,68 +163,46 @@ function game({ bricks, username }) {
         .catch((err) => console.log("error", err));
     }
   };
-  const mainLoop = () => {
-    setHighScore();
 
-    let matrix = matrix_ref.current;
+  //=================================================================================================================
 
-    if (
-      matrix[3].filter((e) => e != 0 && e.id != current_brick_id_ref.current)
-        .length > 0
-    ) {
-      window.alert("Game Over! Score : " + score_ref.current);
-
-      game_running.current = 0;
-
-      return;
+  const sendBrick = () => {
+    let temp_matrix = JSON.parse(JSON.stringify(matrix_ref.current));
+    var new_brick;
+    if (bricks) {
+      new_brick = randomBrick(
+        current_brick_id_ref.current + 1,
+        JSON.parse(bricks)
+      );
+    } else {
+      new_brick = JSON.parse(
+        JSON.stringify(randomBrick(current_brick_id_ref.current + 1))
+      );
     }
 
-    let send_brick = send_brick_ref.current;
-    let current_brick_id = current_brick_id_ref.current;
-    //if send_brick==1, then send a random brick
-    if (send_brick) {
-      let temp_matrix = JSON.parse(JSON.stringify(matrix));
-      var new_brick;
-      if (bricks) {
-        new_brick = randomBrick(
-          current_brick_id_ref.current + 1,
-          JSON.parse(bricks)
-        );
-      } else {
-        new_brick = JSON.parse(
-          JSON.stringify(randomBrick(current_brick_id + 1))
-        );
+    let new_block_start_index = Math.floor(Math.random() * 8);
+    for (let i = 0; i <= 3; i++) {
+      for (let j = new_block_start_index; j <= new_block_start_index + 3; j++) {
+        temp_matrix[i][j] =
+          next_block_ref.current[i][j - new_block_start_index];
       }
-
-      let new_block_start_index = Math.floor(Math.random() * 8);
-      for (let i = 0; i <= 3; i++) {
-        for (
-          let j = new_block_start_index;
-          j <= new_block_start_index + 3;
-          j++
-        ) {
-          temp_matrix[i][j] =
-            next_block_ref.current[i][j - new_block_start_index];
-        }
-      }
-      setMainMatrix(temp_matrix);
-      matrix_ref.current = temp_matrix;
-
-      send_brick_ref.current = 0;
-
-      setCurrentBlock(next_block_ref.current);
-      setNextBlock(new_brick);
-
-      next_block_ref.current = new_brick;
-      return;
     }
-    //==============================================================
-    //==============================================================
+    setMainMatrix(temp_matrix);
+    matrix_ref.current = temp_matrix;
 
-    //movements of block i.e. matrix elements
-    let temp_matrix = JSON.parse(JSON.stringify(matrix));
+    send_brick_ref.current = 0;
+
+    setCurrentBlock(next_block_ref.current);
+    setNextBlock(new_brick);
+
+    next_block_ref.current = new_brick;
+  };
+
+  const updateBrickPositions = () => {
+    console.log(1);
+    let temp_matrix = JSON.parse(JSON.stringify(matrix_ref.current));
     var flag = 1;
-    if (!touched_brick(matrix, current_brick_id_ref.current).down) {
+    if (!touched_brick(matrix_ref.current, current_brick_id_ref.current).down) {
       for (let i = temp_matrix.length - 1; i >= 0; i--) {
         for (let j = temp_matrix[i].length - 1; j >= 0; j--) {
           if (
@@ -241,10 +220,17 @@ function game({ bricks, username }) {
     }
 
     send_brick_ref.current = flag;
-    current_brick_id_ref.current = current_brick_id + (flag ? 1 : 0);
-
-    //delete rows
-    let filled_rows = filledRows(matrix, current_brick_id_ref.current);
+    current_brick_id_ref.current =
+      current_brick_id_ref.current + (flag ? 1 : 0);
+    setMainMatrix(temp_matrix);
+    matrix_ref.current = temp_matrix;
+  };
+  const deleteFilledRows = () => {
+    let temp_matrix = copy(matrix_ref.current);
+    let filled_rows = filledRows(
+      matrix_ref.current,
+      current_brick_id_ref.current
+    );
     for (let i of filled_rows) {
       for (let j in temp_matrix[i]) {
         temp_matrix[i][j] = 0;
@@ -258,8 +244,31 @@ function game({ bricks, username }) {
     setScore(score_ref.current + filled_rows.length * 12);
     score_ref.current = score_ref.current + filled_rows.length * 12;
   };
-  //==============================================================
-  //==============================================================
+  const mainLoop = () => {
+    setHighScore();
+
+    //Check game over
+    if (
+      matrix_ref.current[3].filter(
+        (e) => e != 0 && e.id != current_brick_id_ref.current
+      ).length > 0
+    ) {
+      window.alert("Game Over! Score : " + score_ref.current);
+
+      game_running.current = 0;
+
+      return;
+    }
+
+    if (send_brick_ref.current) {
+      sendBrick();
+    } else {
+      updateBrickPositions();
+    }
+
+    deleteFilledRows();
+  };
+  //=================================================================================================================
 
   const moveBrick = (x, y) => {
     let id = current_brick_id_ref.current;
@@ -300,7 +309,11 @@ function game({ bricks, username }) {
       }
     }
     setMainMatrix(temp_matrix);
+    matrix_ref.current = temp_matrix;
   };
+
+  //=================================================================================================================
+
   const handleKeyDown = (k) => {
     let extremeIndices = extremeBlocks(
       main_matrix,
@@ -329,10 +342,14 @@ function game({ bricks, username }) {
         0,
         landIndices(matrix_ref.current, current_brick_id_ref.current)
       );
+    } else if (k.key == "p") {
+      game_running.current = !game_running.current;
     }
   };
 
-  //set main loop and event listeners
+  //=================================================================================================================
+
+  //set main loop and event listeners===============================================================================
   useEffect(() => {
     document.body.addEventListener("keydown", handleKeyDown);
 
@@ -340,7 +357,9 @@ function game({ bricks, username }) {
       document.body.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown, current_block, rotateBlock]);
+  //==================================================================================================================
 
+  //Main loop for the game===========================================================================================
   useEffect(() => {
     let intv = setInterval(() => {
       if (game_running.current) {
@@ -349,21 +368,7 @@ function game({ bricks, username }) {
     }, 700);
     return () => clearInterval(intv);
   }, []);
-
-  useEffect(() => {
-    let intv1 = setInterval(() => {
-      fetch("https://jsonblob.com/api/jsonBlob/1049296309869363200")
-        .then((res) => res.json())
-        .then((res) => {
-          sessionStorage.setItem("scores", JSON.stringify(res));
-        })
-        .catch((err) => console.log("Error", err));
-    }, 1000);
-    return () => clearInterval(intv1);
-  }, []);
-
-  //==============================================================
-  //==============================================================
+  //====================================================================================================================
 
   return (
     <div className="game">

@@ -155,37 +155,27 @@ const copy = (matrix) => {
 };
 
 const landIndices = (matrix, id) => {
-  let bottom_index = extremeBlocks(matrix, id).down;
+  let extreme_indices = extremeBlocks(matrix, id);
+  let bottom_index = extreme_indices.down;
 
   let block_indices = blockIndices(matrix, id);
-  let bottom_indices = block_indices.filter((b) => b[1] == bottom_index);
-
+  //let bottom_indices = block_indices.filter((b) => b[1] == bottom_index);
+  /*
   var go_down_by = 0;
-
-  if (bottom_index != -Infinity) {
-    for (let i = bottom_index + 1; i <= 19; i++) {
-      var flag = 1;
-
-      for (let j of block_indices) {
-        if (
-          (matrix[i - (bottom_index - j[1])][j[0]] == 0 ||
-            matrix[i - (bottom_index - j[1])][j[0]].id == id) &&
-          (matrix
-            .map((r) => (r[j[0]] == 0 || r[j[0]].id == id ? 0 : 1))
-            .indexOf(1) > j[1] ||
-            matrix
-              .map((r) => (r[j[0]] == 0 || r[j[0]].id == id ? 0 : 1))
-              .indexOf(1) == -1)
-        ) {
-        } else {
-          flag = 0;
-        }
+  for (let i = bottom_index; i + bottom_index <= 19; i++) {
+    var flag = 1;
+    for (let indices of block_indices) {
+      if (
+        matrix[indices[1] + i][indices[0]] !== 0 &&
+        matrix[indices[1] + i][indices[0]].id != id
+      ) {
+        flag = 0;
+        break;
       }
-
-      go_down_by += flag ? 1 : 0;
     }
   }
-  return go_down_by;
+  */
+  return 19;
 };
 
 export {
