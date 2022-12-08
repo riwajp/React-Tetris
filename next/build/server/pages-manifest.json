@@ -1,0 +1,15 @@
+{
+  "/_error": "pages/_error.js",
+  "/_app": "pages/_app.js",
+  "/api/hello": "pages/api/hello.js",
+  "/components/Block": "pages/components/Block.html",
+  "/components/Home/ScoreTable": "pages/components/Home/ScoreTable.html",
+  "/components/Matrix": "pages/components/Matrix.html",
+  "/components/NextBlock": "pages/components/NextBlock.html",
+  "/components/ScoreBoard": "pages/components/ScoreBoard.html",
+  "/game": "pages/game.js",
+  "/components/SmallMatrix": "pages/components/SmallMatrix.html",
+  "/": "pages/index.html",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
+}

@@ -137,7 +137,6 @@ function game({ scores, bricks, username }) {
 
   const setHighScore = () => {
     let high_scores = JSON.parse(sessionStorage.getItem("scores"));
-    console.log(high_scores);
 
     let score_temp = score_ref.current;
     if (high_scores && username && !bricks) {
@@ -155,7 +154,6 @@ function game({ scores, bricks, username }) {
         high_scores[high_score_user_index].latest_score = score_ref.current;
 
         arr = [...high_scores];
-        console.log(arr);
       } else {
         arr = [
           ...high_scores,
@@ -177,7 +175,6 @@ function game({ scores, bricks, username }) {
       fetch(process.env.NEXT_PUBLIC_DB, requestOptions)
         .then((data) => {
           is_high.current = 1;
-          console.log(data);
         })
         .catch((err) => console.log("error", err));
     }

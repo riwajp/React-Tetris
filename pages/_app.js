@@ -11,7 +11,6 @@ function MyApp({ Component, pageProps }) {
         .then((res) => {
           sessionStorage.setItem("scores", JSON.stringify(res));
           setScores(res);
-          console.log(res);
         })
         .catch((err) => console.log("Error", err));
     }, 1000);

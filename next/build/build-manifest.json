@@ -1,0 +1,76 @@
+{
+  "polyfillFiles": [
+    "static/chunks/polyfills-c67a75d1b6f99dc8.js"
+  ],
+  "devFiles": [],
+  "ampDevFiles": [],
+  "lowPriorityFiles": [
+    "static/kpvLtO09h2L-cmD2JtUyv/_buildManifest.js",
+    "static/kpvLtO09h2L-cmD2JtUyv/_ssgManifest.js"
+  ],
+  "rootMainFiles": [],
+  "pages": {
+    "/": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/index-7c3a245fecb3fefe.js"
+    ],
+    "/_app": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/css/5520916905ee8f0d.css",
+      "static/chunks/pages/_app-1b4f92d9012fe6bc.js"
+    ],
+    "/_error": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/_error-8353112a01355ec2.js"
+    ],
+    "/components/Block": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/components/Block-0dc0e05ad9e51bcf.js"
+    ],
+    "/components/Home/ScoreTable": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/components/Home/ScoreTable-7f88d457e9ee3a2c.js"
+    ],
+    "/components/Matrix": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/components/Matrix-5e81b8660846fefb.js"
+    ],
+    "/components/NextBlock": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/components/NextBlock-14b0e09f10b3613f.js"
+    ],
+    "/components/ScoreBoard": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/components/ScoreBoard-0bbf299688709378.js"
+    ],
+    "/components/SmallMatrix": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/components/SmallMatrix-67476da9e0364012.js"
+    ],
+    "/game": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-8c5acb0054140387.js",
+      "static/chunks/main-6818349b9a8fd5d3.js",
+      "static/chunks/pages/game-9fe8e642e8f7af3f.js"
+    ]
+  },
+  "ampFirstPages": []
+}
