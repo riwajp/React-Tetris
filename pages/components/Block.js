@@ -3,17 +3,13 @@ import React from "react";
 function Block({ color, filled, border, land_block, small }) {
   let class_name = `block  ${!small && border ? "border" : ""} ${
     filled ? "filled " : ""
-  } ${land_block ? "land_block" : ""}  ${small ? "small" : ""}`;
+  } ${land_block ? "land_block" : ""}  ${small ? "small" : ""}  ${
+    filled ? color : ""
+  }`;
 
-  let bg = `${filled ? color : small ? "rgb(75, 75, 75)" : ""}`;
-  return (
-    <div
-      className={class_name}
-      style={{
-        backgroundColor: bg,
-      }}
-    ></div>
-  );
+  let box_shadow = `${filled ? color : ""}`;
+
+  return <div className={class_name}></div>;
 }
 
 export default Block;

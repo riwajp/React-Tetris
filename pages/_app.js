@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     // refresh scores every interval================================================================
     let intv = setInterval(() => {
-      fetch("https://jsonblob.com/api/jsonBlob/1049296309869363200")
+      fetch(process.env.NEXT_PUBLIC_DB)
         .then((res) => res.json())
         .then((res) => {
           sessionStorage.setItem("scores", JSON.stringify(res));

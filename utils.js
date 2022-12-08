@@ -10,7 +10,7 @@ const cleanMatrix = () => {
 };
 
 const randomBrick = (id, bricks = local_bricks) => {
-  let colors = ["#EF9A53", "#59C1BD", "#F7A4A4", "#A9AF7E", "#F0FF42"];
+  let colors = ["pink", "orange", "blue", "green"];
   let color = colors[Math.floor(Math.random() * (colors.length - 1))];
 
   let brick_names = Object.keys(bricks);
@@ -159,23 +159,34 @@ const landIndices = (matrix, id) => {
   let bottom_index = extreme_indices.down;
 
   let block_indices = blockIndices(matrix, id);
-  //let bottom_indices = block_indices.filter((b) => b[1] == bottom_index);
-  /*
+
   var go_down_by = 0;
-  for (let i = bottom_index; i + bottom_index <= 19; i++) {
-    var flag = 1;
-    for (let indices of block_indices) {
-      if (
-        matrix[indices[1] + i][indices[0]] !== 0 &&
-        matrix[indices[1] + i][indices[0]].id != id
-      ) {
-        flag = 0;
-        break;
+  if (bottom_index != -Infinity) {
+    for (let j = bottom_index; j < 19; j++) {
+      var flag = 1;
+      for (let i of block_indices) {
+        let block = matrix[i[1] + 1][i[0]];
+
+        if (block == 0 || block.id == id) {
+        } else {
+          flag = 0;
+          return go_down_by;
+        }
+      }
+
+      if (flag == 0) {
+        return go_down_by;
+      } else {
+        go_down_by += 1;
+        bottom_index += 1;
+        for (let i of block_indices) {
+          i[1] += 1;
+        }
       }
     }
   }
-  */
-  return 19;
+
+  return go_down_by;
 };
 
 export {

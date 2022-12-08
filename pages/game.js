@@ -15,7 +15,6 @@ import {
 import NextBlock from "./components/NextBlock";
 
 function game({ bricks, username }) {
-  console.log("S");
   // console.log(JSON.parse(router.query.bricks));
   const mat = useMemo(() => cleanMatrix(), []);
 
@@ -128,7 +127,6 @@ function game({ bricks, username }) {
 
   const setHighScore = () => {
     let high_scores = JSON.parse(sessionStorage.getItem("scores"));
-    console.log(high_scores);
 
     let score_temp = score_ref.current;
     if (high_scores && username && score_temp > 0 && !bricks) {
@@ -146,17 +144,13 @@ function game({ bricks, username }) {
       } else {
         arr = [...high_scores, { name: username, score: score_temp }];
       }
-      console.log(arr.slice(0, Math.min(5, arr.length)));
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(arr),
       };
 
-      fetch(
-        "https://jsonblob.com/api/jsonBlob/1049296309869363200",
-        requestOptions
-      )
+      fetch(process.env.NEXT_PUBLIC_DB, requestOptions)
         .then((data) => {
           is_high.current = 1;
         })
@@ -199,7 +193,6 @@ function game({ bricks, username }) {
   };
 
   const updateBrickPositions = () => {
-    console.log(1);
     let temp_matrix = JSON.parse(JSON.stringify(matrix_ref.current));
     var flag = 1;
     if (!touched_brick(matrix_ref.current, current_brick_id_ref.current).down) {
@@ -319,7 +312,11 @@ function game({ bricks, username }) {
       main_matrix,
       current_brick_id_ref.current
     );
+    if (k.key == "p") {
+      game_running.current = !game_running.current;
+    }
 
+    if (!game_running.current) return;
     if (
       k.code == "ArrowRight" &&
       !touched_brick(main_matrix, current_brick_id_ref.current).right
@@ -342,8 +339,6 @@ function game({ bricks, username }) {
         0,
         landIndices(matrix_ref.current, current_brick_id_ref.current)
       );
-    } else if (k.key == "p") {
-      game_running.current = !game_running.current;
     }
   };
 
@@ -372,16 +367,18 @@ function game({ bricks, username }) {
 
   return (
     <div className="game">
-      <div className="top">
-        <ScoreBoard score={score} />
-        <NextBlock next_block={next_block} current_block={current_block} />
-      </div>
-      <div className="matrix">
-        <Matrix
-          matrix={main_matrix}
-          land_index={land_index}
-          id={current_brick_id_ref}
-        />
+      <div className="overlay">
+        <div className="top">
+          <ScoreBoard score={score} />
+          <NextBlock next_block={next_block} current_block={current_block} />
+        </div>
+        <div className="matrix">
+          <Matrix
+            matrix={main_matrix}
+            land_index={land_index}
+            id={current_brick_id_ref}
+          />
+        </div>
       </div>
     </div>
   );
