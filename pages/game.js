@@ -13,8 +13,18 @@ import {
 } from "../utils";
 
 import NextBlock from "./components/NextBlock";
+import SmallMatrix from "./components/SmallMatrix";
 
-function game({ bricks, username }) {
+function game({ scores, bricks, username }) {
+  /*
+  console.log(
+    scores?.filter((s) => {
+      console.log(Date.now() / 1000 - s.ts);
+      return Date.now() / 1000 - s.ts <= 20;
+    })
+  );
+  */
+
   // console.log(JSON.parse(router.query.bricks));
   const mat = useMemo(() => cleanMatrix(), []);
 
@@ -127,9 +137,10 @@ function game({ bricks, username }) {
 
   const setHighScore = () => {
     let high_scores = JSON.parse(sessionStorage.getItem("scores"));
+    console.log(high_scores);
 
     let score_temp = score_ref.current;
-    if (high_scores && username && score_temp > 0 && !bricks) {
+    if (high_scores && username && !bricks) {
       let high_score_user_index = high_scores.findIndex(
         (s) => s.name == username
       );
@@ -139,10 +150,23 @@ function game({ bricks, username }) {
           high_scores[high_score_user_index].score,
           score_temp
         );
-        console.log("Posted update");
+        high_scores[high_score_user_index].ts = Math.floor(Date.now() / 1000);
+        high_scores[high_score_user_index].matrix = matrix_ref.current;
+        high_scores[high_score_user_index].latest_score = score_ref.current;
+
         arr = [...high_scores];
+        console.log(arr);
       } else {
-        arr = [...high_scores, { name: username, score: score_temp }];
+        arr = [
+          ...high_scores,
+          {
+            name: username,
+            score: score_temp,
+            ts: Math.floor(Date.now() / 1000),
+            matrix: matrix_ref.current,
+            latest_score: score_ref.current,
+          },
+        ];
       }
       const requestOptions = {
         method: "PUT",
@@ -153,6 +177,7 @@ function game({ bricks, username }) {
       fetch(process.env.NEXT_PUBLIC_DB, requestOptions)
         .then((data) => {
           is_high.current = 1;
+          console.log(data);
         })
         .catch((err) => console.log("error", err));
     }
@@ -371,6 +396,21 @@ function game({ bricks, username }) {
         <div className="top">
           <ScoreBoard score={score} />
           <NextBlock next_block={next_block} current_block={current_block} />
+        </div>
+        <div className="small_matrices">
+          {scores
+            ?.filter(
+              (s) => s.name != username && Date.now() / 1000 - s.ts <= 20
+            )
+            .map((s) => (
+              <div className="small_matrix">
+                <div className="small_matrix_top">
+                  <span className="player_name">{s.name}</span>
+                  <span className="player_score">{s.latest_score}</span>
+                </div>
+                <SmallMatrix matrix={s.matrix} />
+              </div>
+            ))}
         </div>
         <div className="matrix">
           <Matrix

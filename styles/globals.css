@@ -4,7 +4,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    background-image: url("https://rare-gallery.com/uploads/posts/1000002-Dark-City-lights-drawing-cityscape-night-reflection-skyscraper-evening-metropolis-midnight-light-darkness-screenshot-urban-area.jpg");
+    background-image: url("../bg.jpg");
     background-size:100% auto;
  
 }
@@ -32,7 +32,6 @@ a {
 .game{
   margin:30px auto auto auto;
   width:fit-content;
-  background-image: url("");
   background-size: auto  100%;
 }
 .overlay{
@@ -256,4 +255,38 @@ td{
 }
 
 
+.small_matrices{
+  position:absolute;
+  bottom:50px;
+  left:50px;
+  background-color: rgba(54, 54, 54,0.5);
+  display:flex;
+  max-width:600px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.not_mine_block{
+  width:10px;
+  height:10px;
+  line-height: 2px;
+  margin-top:-10px;
+}
+.small_row{
+  height:10px;
+}
+.small_matrix_top{
+  width:120px;
+  padding:2px 5px 2px 5px;
+  background-color: rgba(63, 218, 99, 0.7);
+
+}
+
+.small_matrix{
+  padding:5px 5px 5px 5px;
+  
+}
+.player_score{
+  float:right
+}
 
