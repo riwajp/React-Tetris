@@ -16,6 +16,7 @@ import NextBlock from "./components/NextBlock";
 import SmallMatrix from "./components/SmallMatrix";
 
 function game({ scores, bricks, username }) {
+  console.log(scores);
   /*
   console.log(
     scores?.filter((s) => {
@@ -136,40 +137,15 @@ function game({ scores, bricks, username }) {
   //=================================================================================================================
 
   const setHighScore = () => {
-    let high_scores = JSON.parse(sessionStorage.getItem("scores"));
-
-    let score_temp = score_ref.current;
-    if (high_scores && username && !bricks) {
-      let high_score_user_index = high_scores.findIndex(
-        (s) => s.name == username
-      );
-      var arr;
-      if (high_score_user_index != -1) {
-        high_scores[high_score_user_index].score = Math.max(
-          high_scores[high_score_user_index].score,
-          score_temp
-        );
-        high_scores[high_score_user_index].ts = Math.floor(Date.now() / 1000);
-        high_scores[high_score_user_index].matrix = matrix_ref.current;
-        high_scores[high_score_user_index].latest_score = score_ref.current;
-
-        arr = [...high_scores];
-      } else {
-        arr = [
-          ...high_scores,
-          {
-            name: username,
-            score: score_temp,
-            ts: Math.floor(Date.now() / 1000),
-            matrix: matrix_ref.current,
-            latest_score: score_ref.current,
-          },
-        ];
-      }
+    if (username && !bricks) {
       const requestOptions = {
-        method: "PUT",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(arr),
+        body: JSON.stringify({
+          name: username,
+          matrix: JSON.stringify(matrix_ref.current),
+          score: score_ref.current,
+        }),
       };
 
       fetch(process.env.NEXT_PUBLIC_DB, requestOptions)
@@ -395,17 +371,15 @@ function game({ scores, bricks, username }) {
           <NextBlock next_block={next_block} current_block={current_block} />
         </div>
         <div className="small_matrices">
-          {scores
-            ?.filter(
-              (s) => s.name != username && Date.now() / 1000 - s.ts <= 20
-            )
+          {scores?.online
+            .filter((i) => i.name != username)
             .map((s) => (
               <div className="small_matrix">
                 <div className="small_matrix_top">
                   <span className="player_name">{s.name}</span>
                   <span className="player_score">{s.latest_score}</span>
                 </div>
-                <SmallMatrix matrix={s.matrix} />
+                <SmallMatrix matrix={JSON.parse(s.matrix)} />
               </div>
             ))}
         </div>

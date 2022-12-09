@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 function MyApp({ Component, pageProps }) {
   const [scores, setScores] = useState();
+
   useEffect(() => {
     // refresh scores every interval================================================================
     let intv = setInterval(() => {

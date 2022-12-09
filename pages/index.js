@@ -3,7 +3,7 @@ import Link from "next/link";
 import ScoreTable from "./components/Home/ScoreTable";
 
 export default function Home({ scores }) {
-  const [name, setName] = useState("");
+  const [name, setName] = useState();
   let name_filter_values = [
     "{",
     "}",
