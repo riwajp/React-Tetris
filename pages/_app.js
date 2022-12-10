@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    const socket_temp = io("ws://riwaj-tetris.vercel.app");
+    const socket_temp = io("https://riwaj-tetris.vercel.app");
     setSocket(socket_temp);
     return () => socket_temp.disconnect();
   }, []);
