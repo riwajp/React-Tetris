@@ -297,7 +297,121 @@ border:1px solid white;
 .controls{
   display:none;
 }
+
+
+.live-feed-container{
+  background-color: rgba(70, 71, 71,0.4);
+  width:250px;
+  min-height:200px;
+  position:fixed;
+  top:100px;
+  left:50px;
+ 
+ 
+
+}
+
+.live-user{
+  color:white;
+  padding:5px 5px 5px 5px;
+  
+}
+.live-user:nth-child(odd){
+  background-color: rgba(255, 255, 255, 0.4);
+  
+}
+
+.live-user:nth-child(even){
+  background-color: rgba(0, 0, 0, 0.4);
+  
+  
+}
+
+
 @media only screen and (max-width: 600px) {
+
+  .small_matrices{
+    display:none;
+  }
+  .game{
+    margin-top: 10px;
+
+  }
+  .row{
+    margin:-5px 0 0 0;
+
+  }
+
+  .small_row{
+    margin-top:0px;
+  }
+  .small_block_div{
+    margin-top:-5px;
+  }
+  
+  
+  .block{
+    width:20px;
+    height:20px;
+    margin:0 0 0 0;
+    line-height: 5px;
+  }
+  .small{
+    width: 15px;
+    height:15px;
+  }
+  .controls{
+    display: flex;
+    margin-top: 20px;
+  }
+  .others{
+    flex:2;
+  }
+  .arrows{
+    flex:4;
+    justify-content: space-around;
+  }
+  
+  .arrow{
+    background-color: white;
+    width:50px;
+    height:40px;
+    margin-left:10px;
+    margin-top:5px;
+    flex:1;
+    display:block;
+
+
+    border:2px inset black;
+  }
+  .up_container{
+    width:100%;
+
+  }
+  .up{
+    margin-left: auto;
+    margin-right: auto;
+    width:50px;
+    height:40px;
+  }
+  .bottom_container{
+    display: flex;
+  }
+
+  .p,.space{
+    background-color: white;
+    width:50px;
+    height:40px;
+    margin-top: 10px;
+    border:2px inset black;
+    display:block;
+
+
+  }
+  .live-feed-container{
+    display:none;
+  }
+}
 
   .small_matrices{
     display:none;

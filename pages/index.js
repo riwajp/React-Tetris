@@ -42,7 +42,7 @@ export default function Home({ socket }) {
       <Link href={`/game?username=${name}`}>
         <button className="home_play">Play</button>
       </Link>
-      <ScoreTable scores={undefined} />
+      <ScoreTable scores={scores} max={5} live={0} />
     </div>
   );
 }

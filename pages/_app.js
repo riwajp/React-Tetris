@@ -3,7 +3,21 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 function MyApp({ Component, pageProps }) {
-  const [socket, setSocket] = useState();
+  const [scores, setScores] = useState();
+  useEffect(() => {
+    // refresh scores every interval================================================================
+    let intv = setInterval(() => {
+      fetch(process.env.NEXT_PUBLIC_DB)
+        .then((res) => res.json())
+        .then((res) => {
+          sessionStorage.setItem("scores", JSON.stringify(res));
+          setScores(res);
+          console.log(res);
+        })
+        .catch((err) => console.log("Error", err));
+    }, 1000);
+  });
+  //===============================================================================================
 
   useEffect(() => {
     const socket_temp = io.connect("https://riwaj-tetris.vercel.app:5000/");
