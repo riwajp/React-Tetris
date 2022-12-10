@@ -32,10 +32,12 @@ a {
 .game{
   margin:30px auto auto auto;
   width:fit-content;
+  background-image: url("https://media.giphy.com/media/8lGQNlZqYBP86D4Cep/giphy.gif");
   background-size: auto  100%;
+  background-position: center;
 }
 .overlay{
-  background-color: rgba(60, 61, 61,0.4);
+  background-color: rgba(60, 61, 61,0.6);
   height:100%;
   width:100%;
   top:0;
@@ -151,6 +153,30 @@ margin: 5px auto 0 auto;
 
 }
 
+.yellow{
+  border:2px inset white;
+  opacity: 1;
+  box-shadow: 0 0 .2rem #fff,
+  0 0 .2rem #fff,
+  0 0 2rem #ebeb28,
+  0 0 0.8rem #ebeb28,
+  0 0 2.8rem #ebeb28,
+  inset 0 0 1.3rem #ebeb28; 
+
+}
+
+
+.purple{
+  border:2px inset white;
+  opacity: 1;
+  box-shadow: 0 0 .2rem #fff,
+  0 0 .2rem #fff,
+  0 0 2rem #b728eb,
+  0 0 0.8rem #b728eb,
+  0 0 2.8rem #b728eb,
+  inset 0 0 1.3rem #b728eb; 
+
+}
 .land_block{
   background-color: rgb(200, 200, 200);
   opacity: 1;

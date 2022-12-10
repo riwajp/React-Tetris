@@ -10,8 +10,8 @@ const cleanMatrix = () => {
 };
 
 const randomBrick = (id, bricks = local_bricks) => {
-  let colors = ["pink", "orange", "blue", "green"];
-  let color = colors[Math.floor(Math.random() * (colors.length - 1))];
+  let colors = ["pink", "orange", "blue", "green", "yellow", "purple"];
+  let color = colors[Math.floor(Math.random() * colors.length)];
 
   let brick_names = Object.keys(bricks);
   let brick =
