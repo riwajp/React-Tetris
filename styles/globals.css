@@ -32,12 +32,11 @@ a {
 .game{
   margin:30px auto auto auto;
   width:fit-content;
-  background-image: url("https://media.giphy.com/media/8lGQNlZqYBP86D4Cep/giphy.gif");
   background-size: auto  100%;
   background-position: center;
 }
 .overlay{
-  background-color: rgba(60, 61, 61,0.6);
+  background-color: rgba(60, 61, 61,0.4);
   height:100%;
   width:100%;
   top:0;

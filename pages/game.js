@@ -390,8 +390,22 @@ function game({ scores, bricks, username }) {
   }, []);
   //====================================================================================================================
 
+  let bgs = [
+    "https://media.giphy.com/media/26u43GwxpIiUgrHI4/giphy.gif",
+    "https://media.giphy.com/media/8lGQNlZqYBP86D4Cep/giphy.gif",
+    "https://media.giphy.com/media/1yT902UqU5fcFxjLbH/giphy.gif",
+    "https://media.giphy.com/media/l4KihuqeuJEi9qLSM/giphy.gif",
+    "https://media.giphy.com/media/U3qYN8S0j3bpK/giphy.gif",
+  ];
+
+  let bg = useMemo(() => bgs[Math.floor(Math.random() * bgs.length)], []);
   return (
-    <div className="game">
+    <div
+      className="game"
+      style={{
+        backgroundImage: `url(${bg})`,
+      }}
+    >
       <div className="overlay">
         <div className="top">
           <ScoreBoard score={score} />
