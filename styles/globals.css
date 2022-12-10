@@ -259,34 +259,157 @@ td{
   position:absolute;
   bottom:50px;
   left:50px;
-  background-color: rgba(54, 54, 54,0.5);
   display:flex;
-  max-width:600px;
+  max-width:300px;
   flex-wrap: wrap;
-  justify-content: space-around;
 }
 
 .not_mine_block{
   width:10px;
   height:10px;
-  line-height: 2px;
-  margin-top:-10px;
+  margin-top: -10px;
+ 
+  
 }
 .small_row{
   height:10px;
+  margin-top:0;
 }
 .small_matrix_top{
   width:120px;
-  padding:2px 5px 2px 5px;
+  padding:2px 2px 2px 2px;
   background-color: rgba(63, 218, 99, 0.7);
 
 }
 
 .small_matrix{
-  padding:5px 5px 5px 5px;
+  margin-bottom:20px;
+  margin-left:20px;
+ 
+  background-color: rgba(54, 54, 54,0.5);
+border:1px solid white;
+  
   
 }
 .player_score{
   float:right
+}
+.controls{
+  display:none;
+}
+
+
+.live-feed-container{
+  background-color: rgba(70, 71, 71,0.4);
+  width:250px;
+  min-height:200px;
+  position:fixed;
+  top:100px;
+  left:50px;
+ 
+ 
+
+}
+
+.live-user{
+  color:white;
+  padding:5px 5px 5px 5px;
+  
+}
+.live-user:nth-child(odd){
+  background-color: rgba(255, 255, 255, 0.4);
+  
+}
+
+.live-user:nth-child(even){
+  background-color: rgba(0, 0, 0, 0.4);
+  
+  
+}
+
+
+@media only screen and (max-width: 600px) {
+
+  .small_matrices{
+    display:none;
+  }
+  .game{
+    margin-top: 10px;
+
+  }
+  .row{
+    margin:-5px 0 0 0;
+
+  }
+
+  .small_row{
+    margin-top:0px;
+  }
+  .small_block_div{
+    margin-top:-5px;
+  }
+  
+  
+  .block{
+    width:20px;
+    height:20px;
+    margin:0 0 0 0;
+    line-height: 5px;
+  }
+  .small{
+    width: 15px;
+    height:15px;
+  }
+  .controls{
+    display: flex;
+    margin-top: 20px;
+  }
+  .others{
+    flex:2;
+  }
+  .arrows{
+    flex:4;
+    justify-content: space-around;
+  }
+  
+  .arrow{
+    background-color: white;
+    width:50px;
+    height:40px;
+    margin-left:10px;
+    margin-top:5px;
+    flex:1;
+    display:block;
+
+
+    border:2px inset black;
+  }
+  .up_container{
+    width:100%;
+
+  }
+  .up{
+    margin-left: auto;
+    margin-right: auto;
+    width:50px;
+    height:40px;
+  }
+  .bottom_container{
+    display: flex;
+  }
+
+  .p,.space{
+    background-color: white;
+    width:50px;
+    height:40px;
+    margin-top: 10px;
+    border:2px inset black;
+    display:block;
+
+
+  }
+  .live-feed-container{
+    display:none;
+  }
 }
 

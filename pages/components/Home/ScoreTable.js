@@ -1,11 +1,13 @@
 import React from "react";
 
-function ScoreTable({ scores }) {
+function ScoreTable({ scores, max, live }) {
   return (
     <div>
       {" "}
       <div className="home_scores">
-        <div className="home_scores_title glow">Hall of Fame</div>
+        <div className="home_scores_title glow">
+          {!live ? "Hall of Fame" : "Online Players"}
+        </div>
         {scores ? (
           <table cellSpacing={0}>
             <tbody>
@@ -17,7 +19,7 @@ function ScoreTable({ scores }) {
 
               {scores
                 .sort((a, b) => b.score - a.score)
-                .slice(0, 5)
+                .slice(0, max)
                 .map((s, i) => (
                   <tr className="score_member">
                     <td>{i + 1}.</td>

@@ -13,8 +13,8 @@ import {
 } from "../utils";
 
 import NextBlock from "./components/NextBlock";
-import SmallMatrix from "./components/SmallMatrix";
-
+import Controls from "./components/Controls";
+import LiveFeed from "./components/LiveFeed";
 function game({ scores, bricks, username }) {
   /*
   console.log(
@@ -46,7 +46,7 @@ function game({ scores, bricks, username }) {
   const [next_block, setNextBlock] = useState(initial_block);
   const next_block_ref = useRef(next_block);
   const [score, setScore] = useState(0);
-  const score_ref = useRef(score);
+  const score_ref = useRef(0);
   const [land_index, setLandIndex] = useState(
     landIndices(main_matrix, current_brick_id_ref.current)
   );
@@ -135,7 +135,7 @@ function game({ scores, bricks, username }) {
 
   //=================================================================================================================
 
-  const setHighScore = () => {
+  const setHighScore = (over = 0) => {
     let high_scores = JSON.parse(sessionStorage.getItem("scores"));
 
     let score_temp = score_ref.current;
@@ -145,12 +145,13 @@ function game({ scores, bricks, username }) {
       );
       var arr;
       if (high_score_user_index != -1) {
-        high_scores[high_score_user_index].score = Math.max(
-          high_scores[high_score_user_index].score,
-          score_temp
-        );
+        if (!over) {
+          high_scores[high_score_user_index].score = Math.max(
+            high_scores[high_score_user_index].score,
+            score_temp
+          );
+        }
         high_scores[high_score_user_index].ts = Math.floor(Date.now() / 1000);
-        high_scores[high_score_user_index].matrix = matrix_ref.current;
         high_scores[high_score_user_index].latest_score = score_ref.current;
 
         arr = [...high_scores];
@@ -161,7 +162,7 @@ function game({ scores, bricks, username }) {
             name: username,
             score: score_temp,
             ts: Math.floor(Date.now() / 1000),
-            matrix: matrix_ref.current,
+
             latest_score: score_ref.current,
           },
         ];
@@ -268,6 +269,8 @@ function game({ scores, bricks, username }) {
         (e) => e != 0 && e.id != current_brick_id_ref.current
       ).length > 0
     ) {
+      score_ref.current = score_ref.current.toString() + " " + "(Over)";
+      setHighScore(1);
       window.alert("Game Over! Score : " + score_ref.current);
 
       game_running.current = 0;
@@ -394,21 +397,7 @@ function game({ scores, bricks, username }) {
           <ScoreBoard score={score} />
           <NextBlock next_block={next_block} current_block={current_block} />
         </div>
-        <div className="small_matrices">
-          {scores
-            ?.filter(
-              (s) => s.name != username && Date.now() / 1000 - s.ts <= 20
-            )
-            .map((s) => (
-              <div className="small_matrix">
-                <div className="small_matrix_top">
-                  <span className="player_name">{s.name}</span>
-                  <span className="player_score">{s.latest_score}</span>
-                </div>
-                <SmallMatrix matrix={s.matrix} />
-              </div>
-            ))}
-        </div>
+        <div className="small_matrices"></div>
         <div className="matrix">
           <Matrix
             matrix={main_matrix}
@@ -417,6 +406,8 @@ function game({ scores, bricks, username }) {
           />
         </div>
       </div>
+      <Controls handleKeyDown={handleKeyDown} />
+      <LiveFeed scores={scores} username={username} />
     </div>
   );
 }

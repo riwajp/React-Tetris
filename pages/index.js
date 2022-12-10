@@ -42,7 +42,7 @@ export default function Home({ scores }) {
       <Link href={`/game?username=${name}`}>
         <button className="home_play">Play</button>
       </Link>
-      <ScoreTable scores={scores} />
+      <ScoreTable scores={scores} max={5} live={0} />
     </div>
   );
 }
