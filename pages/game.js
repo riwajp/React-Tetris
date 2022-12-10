@@ -13,23 +13,19 @@ import {
 } from "../utils";
 
 import NextBlock from "./components/NextBlock";
-import SmallMatrix from "./components/SmallMatrix";
+import OnlineMatrices from "./components/OnlineMatrices";
+import Controls from "./components/Controls";
 
-function game({ scores, bricks, username }) {
-  console.log(scores);
-  /*
-  console.log(
-    scores?.filter((s) => {
-      console.log(Date.now() / 1000 - s.ts);
-      return Date.now() / 1000 - s.ts <= 20;
-    })
-  );
-  */
-
-  // console.log(JSON.parse(router.query.bricks));
+function game({ socket, bricks, username }) {
   const mat = useMemo(() => cleanMatrix(), []);
 
   const [main_matrix, setMainMatrix] = useState(mat); //main matrix
+
+  useEffect(() => {
+    if (username && !bricks) {
+      socket?.emit("send-state", username, main_matrix, score_ref.current);
+    }
+  }, [main_matrix, socket]);
   const game_running = useRef(1);
 
   const matrix_ref = useRef(main_matrix);
@@ -136,26 +132,6 @@ function game({ scores, bricks, username }) {
 
   //=================================================================================================================
 
-  const setHighScore = () => {
-    if (username && !bricks) {
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: username,
-          matrix: JSON.stringify(matrix_ref.current),
-          score: score_ref.current,
-        }),
-      };
-
-      fetch(process.env.NEXT_PUBLIC_DB, requestOptions)
-        .then((data) => {
-          is_high.current = 1;
-        })
-        .catch((err) => console.log("error", err));
-    }
-  };
-
   //=================================================================================================================
 
   const sendBrick = () => {
@@ -236,8 +212,6 @@ function game({ scores, bricks, username }) {
     score_ref.current = score_ref.current + filled_rows.length * 12;
   };
   const mainLoop = () => {
-    setHighScore();
-
     //Check game over
     if (
       matrix_ref.current[3].filter(
@@ -371,17 +345,7 @@ function game({ scores, bricks, username }) {
           <NextBlock next_block={next_block} current_block={current_block} />
         </div>
         <div className="small_matrices">
-          {scores?.online
-            .filter((i) => i.name != username)
-            .map((s) => (
-              <div className="small_matrix">
-                <div className="small_matrix_top">
-                  <span className="player_name">{s.name}</span>
-                  <span className="player_score">{s.latest_score}</span>
-                </div>
-                <SmallMatrix matrix={JSON.parse(s.matrix)} />
-              </div>
-            ))}
+          <OnlineMatrices socket={socket} />
         </div>
         <div className="matrix">
           <Matrix
@@ -391,6 +355,7 @@ function game({ scores, bricks, username }) {
           />
         </div>
       </div>
+      <Controls handleKeyDown={handleKeyDown} />
     </div>
   );
 }

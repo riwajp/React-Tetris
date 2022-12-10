@@ -7,7 +7,7 @@ function Matrix({ matrix, land_index, id }) {
   return (
     <div>
       {matrix?.map((row, i) => (
-        <div key={i}>
+        <div key={i} className="row">
           {row?.map((element, j) => (
             <Block
               key={`${i} ${j}`}

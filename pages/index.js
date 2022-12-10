@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import ScoreTable from "./components/Home/ScoreTable";
 
-export default function Home({ scores }) {
+export default function Home({ socket }) {
   const [name, setName] = useState();
   let name_filter_values = [
     "{",
@@ -42,7 +42,7 @@ export default function Home({ scores }) {
       <Link href={`/game?username=${name}`}>
         <button className="home_play">Play</button>
       </Link>
-      <ScoreTable scores={scores} />
+      <ScoreTable scores={undefined} />
     </div>
   );
 }
