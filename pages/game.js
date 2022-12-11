@@ -10,6 +10,7 @@ import {
   rotateMatrix,
   copy,
   landIndices,
+  deadScore,
 } from "../utils";
 
 import NextBlock from "./components/NextBlock";
@@ -153,6 +154,10 @@ function game({ scores, bricks, username }) {
         }
         high_scores[high_score_user_index].ts = Math.floor(Date.now() / 1000);
         high_scores[high_score_user_index].latest_score = score_ref.current;
+        high_scores[high_score_user_index].filled = deadScore(
+          matrix_ref.current,
+          current_brick_id_ref.current
+        );
 
         arr = [...high_scores];
       } else {
@@ -164,6 +169,7 @@ function game({ scores, bricks, username }) {
             ts: Math.floor(Date.now() / 1000),
 
             latest_score: score_ref.current,
+            filled: deadScore(matrix_ref.current, current_brick_id_ref.current),
           },
         ];
       }

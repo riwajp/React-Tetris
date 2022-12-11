@@ -189,6 +189,15 @@ const landIndices = (matrix, id) => {
   return go_down_by;
 };
 
+const deadScore = (matrix, id) => {
+  var level = 0;
+
+  for (let i = 4; i <= 19; i++) {
+    level += matrix[i].filter((c) => c != 0 && c.id != id).length;
+  }
+
+  return level;
+};
 export {
   cleanMatrix,
   randomBrick,
@@ -200,4 +209,5 @@ export {
   rotateMatrix,
   copy,
   landIndices,
+  deadScore,
 };

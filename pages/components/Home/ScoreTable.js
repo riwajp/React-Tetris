@@ -15,6 +15,7 @@ function ScoreTable({ scores, max, live }) {
                 <th>Rank</th>
                 <th>Name</th>
                 <th>Score</th>
+                {live ? <th>Filled</th> : ""}
               </tr>
 
               {scores
@@ -25,7 +26,12 @@ function ScoreTable({ scores, max, live }) {
                     <td>{i + 1}.</td>
                     <td>{s.name}</td>
 
-                    <td>{s.score}</td>
+                    <td>{live ? s.latest_score : s.score}</td>
+                    {live ? (
+                      <td>{Math.floor((s.filled / (15 * 12)) * 100)}%</td>
+                    ) : (
+                      ""
+                    )}
                   </tr>
                 ))}
             </tbody>
