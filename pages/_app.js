@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   const [scores, setScores] = useState();
@@ -25,7 +26,14 @@ function MyApp({ Component, pageProps }) {
     //================================================================================================
   }, []);
 
-  return <Component {...pageProps} scores={scores} />;
+  return (
+    <>
+      <Head>
+        <title>Tetris - Play online</title>
+      </Head>
+      <Component {...pageProps} scores={scores} />
+    </>
+  );
 }
 
 export default MyApp;
