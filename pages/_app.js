@@ -3,18 +3,19 @@ import { useEffect, useState } from "react";
 
 function MyApp({ Component, pageProps }) {
   const [scores, setScores] = useState();
+
   useEffect(() => {
     // refresh scores every interval================================================================
-    let intv = setInterval(() => {
-      fetch(process.env.NEXT_PUBLIC_DB)
-        .then((res) => res.json())
-        .then((res) => {
-          sessionStorage.setItem("scores", JSON.stringify(res));
-          setScores(res);
-          console.log(res);
-        })
-        .catch((err) => console.log("Error", err));
-    }, 1000);
+    // let intv = setInterval(() => {
+    //   fetch(process.env.NEXT_PUBLIC_DB)
+    //     .then((res) => res.json())
+    //     .then((res) => {
+    //       sessionStorage.setItem("scores", JSON.stringify(res));
+    //       setScores(res);
+    //       console.log(res);
+    //     })
+    //     .catch((err) => console.log("Error", err));
+    // }, 1000);
     //===============================================================================================
 
     //clear interval when the page unmounts
